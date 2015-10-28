@@ -5,3 +5,5 @@ upload/
 ClinicalPathways.iml
 target/
 .settings/
+mvnw
+mvnw.cmd
