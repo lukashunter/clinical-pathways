@@ -1,0 +1,7 @@
+upload/
+.idea/
+.mvn/
+.settings/
+ClinicalPathways.iml
+target/
+.settings/

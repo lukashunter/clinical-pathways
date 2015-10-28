@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<head th:fragment="head">
+    <title>Clinical Pathways - editor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <!--jQuery-->
+    <script th:src="@{/js/components/jquery/dist/jquery.min.js}" scr="js/components/jquery/dist/jquery.min.js"></script>
+    <!--/jQuery-->
+
+    <!--Bootstrap-->
+    <link rel="stylesheet" th:href="@{/js/components/bootstrap/dist/css/bootstrap.css}"/>
+    <link rel="stylesheet" th:href="@{/js/components/bootstrap/dist/css/bootstrap-theme.css}"/>
+    <script th:src="@{/js/components/bootstrap/dist/js/bootstrap.js}" scr="js/components/bootstrap/dist/js/bootstrap.js"></script>
+    <!--/Bootstrap-->
+
+    <!--SVG-->
+    <script th:src="@{/js/lib/svg.js}" scr="js/lib/svg.js"></script>
+    <script th:src="@{/js/lib/svg.draggable.js}" scr="js/lib/svg.draggable.js"></script>
+    <!--/SVG-->
+
+    <script th:src="@{/js/components/lodash/lodash.min.js}" scr="js/components/lodash/lodash.min.js"></script>
+
+    <!--mine-->
+    <link rel="stylesheet" th:href="@{css/style.css}" href="css/style.css"/>
+    <script th:src="@{/js/editor.js}" scr="js/editor.js"></script>
+    <script th:src="@{/js/enums.js}" scr="js/enums.js"></script>
+    <script th:src="@{/js/factory.js}" scr="js/factory.js"></script>
+    <script th:src="@{/js/navbar.js}" scr="js/navbar.js"></script>
+    <!--/mine-->
+
+</head>
+</body>
+</html>
