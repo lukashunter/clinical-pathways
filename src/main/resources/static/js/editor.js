@@ -6,6 +6,7 @@ function initDrawing() {
 }
 
 function init(data) {
+    console.log(data);
     EDITOR.xpdl = data;
     EDITOR.draw = initDrawing();
 
@@ -24,6 +25,11 @@ function prepareWorkflowProcesses(workflowProcessList) {
         if (workflowProcess.activities != null) {
             const activityArray = workflowProcess.activities.activity;
             prepareActivities(activityArray);
+        }
+
+        if (workflowProcess.transitions != null) {
+            const transitionArray = workflowProcess.transitions.transition;
+            prepareTransitions(transitionArray);
         }
     })
 }
@@ -85,3 +91,24 @@ function findTaskLab(task) {
     return false;
 }
 
+function prepareTransitions(transitionList){
+    _.forEach(transitionList, function (transition) {
+        extractCoordinatesArray(transition);
+    });
+}
+
+function extractCoordinatesArray(transition){
+    var coordinatesList = [];
+
+    if(transition.connectorGraphicsInfos != null){
+        var connectorGraphicsInfoArray = transition.connectorGraphicsInfos.connectorGraphicsInfo;
+        _.forEach(connectorGraphicsInfoArray, function (connectorGraphicsInfo) {
+            var coordinatesArray = connectorGraphicsInfo.coordinates;
+            _.forEach(coordinatesArray, function (coordinates) {
+                coordinatesList.push([coordinates.xcoordinate, coordinates.ycoordinate]);
+            });
+            prepareTransition(coordinatesList);
+            coordinatesList = [];
+        });
+    }
+}

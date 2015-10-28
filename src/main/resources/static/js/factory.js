@@ -28,8 +28,6 @@ function getDimension(activity){
     if(nodeGraphicsInfos &&  nodeGraphicsInfos.nodeGraphicsInfo.length > 0){
         var nodeGraphicsInfo = nodeGraphicsInfos.nodeGraphicsInfo[0];
 
-        console.log(nodeGraphicsInfo);
-
         return {
             coordinates: nodeGraphicsInfo.coordinates,
             height: nodeGraphicsInfo.height,
@@ -114,7 +112,7 @@ function prepareTaskLab(dimension){
 function prepareGateway(dimension){
     var draw = EDITOR.draw;
     var rect = draw.rect(50,50);
-    rect.rotate(45);
+    rect.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
 
     var gradient = draw.gradient('radial', function(stop) {
         stop.at(0, '#FFFFDA');
@@ -129,8 +127,17 @@ function prepareGateway(dimension){
 
     rect.typeEnum = ElementTypeEnum.GATE;
 
-    rect.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
+    rect.rotate(45);
     rect.draggable();
 
     return rect;
+}
+
+function prepareTransition(coordinates){
+    console.log(coordinates);
+    /*    coordinates = [[0,0], [100,50], [50,100], [150,50], [200,50], [250,100], [300,50], [350,50]];*/
+    var draw = EDITOR.draw;
+    var transition = draw.polyline(coordinates).fill('none').stroke({ width: 1.2 })
+
+    return transition;
 }
