@@ -1,31 +1,41 @@
-
 function svgElementFactory(elementType, activity) {
     var svgElement;
 
-    var dimension = getDimension(activity);
-
     switch (elementType) {
         case ElementTypeEnum.EVENT:
-            svgElement = prepareEvent(dimension);
+            svgElement = prepareEvent(activity);
             break;
         case ElementTypeEnum.TASK_RESEARCH:
-            svgElement = prepareTaskReseach(dimension);
+            svgElement = prepareTaskResearch(activity);
             break;
         case ElementTypeEnum.TASK_LAB:
-            svgElement = prepareTaskLab(dimension);
+            svgElement = prepareTaskLab(activity);
             break;
         case ElementTypeEnum.GATE:
-            svgElement = prepareGateway(dimension);
+            svgElement = prepareGateway(activity);
             break;
     }
+
+    svgElement.activityId = activity.id;
+    svgElement.draggable();
+    registerEventHandler(svgElement);
+
+    EDITOR.elementsMap[activity.id] = {
+        activity: activity,
+        svgElement: svgElement,
+        type: elementType,
+        fromPaths: [],
+        toPaths: []
+    };
+
 
     return svgElement;
 }
 
-function getDimension(activity){
+function getDimension(activity) {
     var nodeGraphicsInfos = activity.nodeGraphicsInfos;
 
-    if(nodeGraphicsInfos &&  nodeGraphicsInfos.nodeGraphicsInfo.length > 0){
+    if (nodeGraphicsInfos && nodeGraphicsInfos.nodeGraphicsInfo.length > 0) {
         var nodeGraphicsInfo = nodeGraphicsInfos.nodeGraphicsInfo[0];
 
         return {
@@ -38,11 +48,14 @@ function getDimension(activity){
     return {};
 }
 
-function prepareEvent(dimension){
+function prepareEvent(activity) {
+    var dimension = getDimension(activity);
+
     var draw = EDITOR.draw;
     var circle = draw.circle(50);
+    circle.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
 
-    var gradient = draw.gradient('radial', function(stop) {
+    var gradient = draw.gradient('radial', function (stop) {
         stop.at(0, '#E8FFE0');
         stop.at(1, '#B2FF99');
     });
@@ -53,20 +66,17 @@ function prepareEvent(dimension){
         'stroke-width': 2
     });
 
-    circle.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
-    circle.draggable();
-
-    circle.typeEnum = ElementTypeEnum.EVENT;
-
     return circle;
 }
 
-function prepareTaskReseach(dimension){
-    var draw = EDITOR.draw;
-    var rect = draw.rect(140, 90)
-    rect.radius(10)
+function prepareTaskResearch(activity) {
+    var dimension = getDimension(activity);
 
-    var gradient = draw.gradient('radial', function(stop) {
+    var draw = EDITOR.draw;
+    var rect = draw.rect(140, 90).radius(10);
+    rect.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
+
+    var gradient = draw.gradient('radial', function (stop) {
         stop.at(0, '#85E0FF');
         stop.at(1, '#00CCFF');
     });
@@ -77,20 +87,17 @@ function prepareTaskReseach(dimension){
         'stroke-width': 2
     });
 
-    rect.typeEnum = ElementTypeEnum.TASK_RESEARCH;
-
-    rect.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
-    rect.draggable();
-
     return rect;
 }
 
-function prepareTaskLab(dimension){
-    var draw = EDITOR.draw;
-    var rect = draw.rect(140, 90)
-    rect.radius(10)
+function prepareTaskLab(activity) {
+    var dimension = getDimension(activity);
 
-    var gradient = draw.gradient('radial', function(stop) {
+    var draw = EDITOR.draw;
+    var rect = draw.rect(140, 90).radius(10);
+    rect.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
+
+    var gradient = draw.gradient('radial', function (stop) {
         stop.at(0, '#FFD4CA');
         stop.at(1, '#FF704D');
     });
@@ -101,20 +108,17 @@ function prepareTaskLab(dimension){
         'stroke-width': 2
     });
 
-    rect.typeEnum = ElementTypeEnum.TASK_LAB;
-
-    rect.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
-    rect.draggable();
-
     return rect;
 }
 
-function prepareGateway(dimension){
-    var draw = EDITOR.draw;
-    var rect = draw.rect(50,50);
-    rect.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
+function prepareGateway(activity) {
+    var dimension = getDimension(activity);
 
-    var gradient = draw.gradient('radial', function(stop) {
+    var draw = EDITOR.draw;
+    var rect = draw.rect(50, 50);
+    rect.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate).rotate(45);
+
+    var gradient = draw.gradient('radial', function (stop) {
         stop.at(0, '#FFFFDA');
         stop.at(1, '#FFFF85');
     });
@@ -125,19 +129,33 @@ function prepareGateway(dimension){
         'stroke-width': 2
     });
 
-    rect.typeEnum = ElementTypeEnum.GATE;
-
-    rect.rotate(45);
-    rect.draggable();
-
     return rect;
 }
 
-function prepareTransition(coordinates){
-    console.log(coordinates);
-    /*    coordinates = [[0,0], [100,50], [50,100], [150,50], [200,50], [250,100], [300,50], [350,50]];*/
+function preparePath(from, to) {
     var draw = EDITOR.draw;
-    var transition = draw.polyline(coordinates).fill('none').stroke({ width: 1.2 })
+    var path = draw.path("M " + from.x + " " + from.y + " L " + to.x + " " + to.y);
 
-    return transition;
+    path.attr({
+        stroke: 'red',
+        'stroke-width': 1
+    });
+
+    path.fill('none').stroke({ width: 1 });
+
+    prepareMarker(path);
+
+    path.back();
+
+    return path;
 }
+
+function prepareMarker(path) {
+    var marker = EDITOR.draw.marker(10, 10)
+    marker.path().attr({
+        d: "M 0 0 L 10 5 L 0 10 z"
+    });
+    marker.ref(path.length() / 2, 5);
+    path.marker('end', marker);
+}
+

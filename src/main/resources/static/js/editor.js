@@ -2,15 +2,18 @@ var EDITOR = {};
 
 function initDrawing() {
     var draw = SVG('drawing').size('100%', window.innerHeight - 80);
+
     return draw;
 }
 
 function init(data) {
-    console.log(data);
     EDITOR.xpdl = data;
     EDITOR.draw = initDrawing();
+    EDITOR.elementsMap = {};
 
     prepareDiagram();
+
+    console.log(EDITOR);
 }
 
 function prepareDiagram() {
@@ -93,22 +96,6 @@ function findTaskLab(task) {
 
 function prepareTransitions(transitionList){
     _.forEach(transitionList, function (transition) {
-        extractCoordinatesArray(transition);
+        prepareConnection(transition);
     });
-}
-
-function extractCoordinatesArray(transition){
-    var coordinatesList = [];
-
-    if(transition.connectorGraphicsInfos != null){
-        var connectorGraphicsInfoArray = transition.connectorGraphicsInfos.connectorGraphicsInfo;
-        _.forEach(connectorGraphicsInfoArray, function (connectorGraphicsInfo) {
-            var coordinatesArray = connectorGraphicsInfo.coordinates;
-            _.forEach(coordinatesArray, function (coordinates) {
-                coordinatesList.push([coordinates.xcoordinate, coordinates.ycoordinate]);
-            });
-            prepareTransition(coordinatesList);
-            coordinatesList = [];
-        });
-    }
 }
