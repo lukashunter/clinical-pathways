@@ -1,22 +1,18 @@
+window.onload = initDrawing;
+
 var EDITOR = {};
 
 function initDrawing() {
-    var draw = SVG('drawing').size('100%', window.innerHeight - 80);
-
-    return draw;
+    if (SVG.supported) {
+        EDITOR.draw = SVG('drawing').size(window.innerWidth, window.innerHeight - 80);
+        EDITOR.elementsMap = {};
+    } else {
+        alert('SVG not supported')
+    }
 }
 
-function init(data) {
+function prepareDiagram(data) {
     EDITOR.xpdl = data;
-    EDITOR.draw = initDrawing();
-    EDITOR.elementsMap = {};
-
-    prepareDiagram();
-
-    console.log(EDITOR);
-}
-
-function prepareDiagram() {
     if (EDITOR.xpdl.workflowProcesses != null) {
         const workflowProcessArray = EDITOR.xpdl.workflowProcesses.workflowProcess;
         prepareWorkflowProcesses(workflowProcessArray);
@@ -48,13 +44,13 @@ function findElement(activity) {
     var elementType;
 
     elementType = findEvent(activity);
-    if(elementType) return elementType;
+    if (elementType) return elementType;
 
     elementType = findTask(activity);
-    if(elementType) return elementType;
+    if (elementType) return elementType;
 
     elementType = findGate(activity);
-    if(elementType) return elementType;
+    if (elementType) return elementType;
 
 }
 
@@ -75,8 +71,8 @@ function findTask(activity) {
     }
 }
 
-function findGate(activity){
-    if(activity.route){
+function findGate(activity) {
+    if (activity.route) {
         return ElementTypeEnum.GATE
     }
 }
@@ -94,7 +90,7 @@ function findTaskLab(task) {
     return false;
 }
 
-function prepareTransitions(transitionList){
+function prepareTransitions(transitionList) {
     _.forEach(transitionList, function (transition) {
         prepareConnection(transition);
     });

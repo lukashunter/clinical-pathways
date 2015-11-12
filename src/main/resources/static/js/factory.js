@@ -1,26 +1,29 @@
 function svgElementFactory(elementType, activity) {
-    var svgElement;
+    var wrapper;
 
     switch (elementType) {
         case ElementTypeEnum.EVENT:
-            svgElement = prepareEvent(activity);
+            wrapper = prepareEvent(activity);
             break;
         case ElementTypeEnum.TASK_RESEARCH:
-            svgElement = prepareTaskResearch(activity);
+            wrapper = prepareTaskResearch(activity);
             break;
         case ElementTypeEnum.TASK_LAB:
-            svgElement = prepareTaskLab(activity);
+            wrapper = prepareTaskLab(activity);
             break;
         case ElementTypeEnum.GATE:
-            svgElement = prepareGateway(activity);
+            wrapper = prepareGateway(activity);
             break;
     }
 
+    var group = wrapper.group;
+    var svgElement = wrapper.svgElement;
+
     svgElement.activityId = activity.id;
-    svgElement.draggable();
-    registerEventHandler(svgElement);
+    group.activityId = activity.id;
 
     EDITOR.elementsMap[activity.id] = {
+        group: group,
         activity: activity,
         svgElement: svgElement,
         type: elementType,
@@ -28,6 +31,10 @@ function svgElementFactory(elementType, activity) {
         toPaths: []
     };
 
+    group.draggable();
+    registerEventHandler(group);
+
+    if (elementType != ElementTypeEnum.EVENT) prepareNodeDescription(activity);
 
     return svgElement;
 }
@@ -51,11 +58,16 @@ function getDimension(activity) {
 function prepareEvent(activity) {
     var dimension = getDimension(activity);
 
-    var draw = EDITOR.draw;
-    var circle = draw.circle(50);
-    circle.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
+    var group = EDITOR.draw.group();
+    var circle = group.circle(50);
+    group.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
 
-    var gradient = draw.gradient('radial', function (stop) {
+    /*    var text = group.text('Start').dx(8).dy(10);
+     text.font({
+     size: 14
+     })*/
+
+    var gradient = group.gradient('radial', function (stop) {
         stop.at(0, '#E8FFE0');
         stop.at(1, '#B2FF99');
     });
@@ -66,19 +78,19 @@ function prepareEvent(activity) {
         'stroke-width': 2
     });
 
-    return circle;
+    return {group: group, svgElement: circle};
 }
 
 function prepareTaskResearch(activity) {
     var dimension = getDimension(activity);
 
-    var draw = EDITOR.draw;
-    var rect = draw.rect(140, 90).radius(10);
-    rect.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
+    var group = EDITOR.draw.group();
+    var rect = group.rect(140, 90).radius(10);
+    group.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
 
-    var gradient = draw.gradient('radial', function (stop) {
-        stop.at(0, '#85E0FF');
-        stop.at(1, '#00CCFF');
+    var gradient = group.gradient('radial', function (stop) {
+        stop.at(0, '#c7f1ff');
+        stop.at(1, '#1ad1ff');
     });
 
     rect.attr({
@@ -87,38 +99,39 @@ function prepareTaskResearch(activity) {
         'stroke-width': 2
     });
 
-    return rect;
+    return {group: group, svgElement: rect};
 }
 
 function prepareTaskLab(activity) {
     var dimension = getDimension(activity);
 
-    var draw = EDITOR.draw;
-    var rect = draw.rect(140, 90).radius(10);
-    rect.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
+    var group = EDITOR.draw.group();
+    var rect = group.rect(140, 90).radius(10);
+    group.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
 
-    var gradient = draw.gradient('radial', function (stop) {
+    var gradient = group.gradient('radial', function (stop) {
         stop.at(0, '#FFD4CA');
         stop.at(1, '#FF704D');
     });
 
     rect.attr({
         fill: gradient,
-        stroke: '#3399FF',
+        stroke: '#d62b00',
         'stroke-width': 2
     });
 
-    return rect;
+    return {group: group, svgElement: rect};
 }
 
 function prepareGateway(activity) {
     var dimension = getDimension(activity);
 
-    var draw = EDITOR.draw;
-    var rect = draw.rect(50, 50);
-    rect.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate).rotate(45);
+    var group = EDITOR.draw.group();
+    var rect = group.rect(80, 80);
+    group.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
+    rect.rotate(45);
 
-    var gradient = draw.gradient('radial', function (stop) {
+    var gradient = group.gradient('radial', function (stop) {
         stop.at(0, '#FFFFDA');
         stop.at(1, '#FFFF85');
     });
@@ -129,7 +142,7 @@ function prepareGateway(activity) {
         'stroke-width': 2
     });
 
-    return rect;
+    return {group: group, svgElement: rect};
 }
 
 function preparePath(from, to) {
@@ -141,7 +154,7 @@ function preparePath(from, to) {
         'stroke-width': 1
     });
 
-    path.fill('none').stroke({ width: 1 });
+    path.fill('none').stroke({width: 1});
 
     prepareMarker(path);
 

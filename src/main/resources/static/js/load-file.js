@@ -1,14 +1,14 @@
-$(document).on('change', '.btn-file :file', function() {
+$(document).on('change', '.btn-file :file', function () {
     var input = $(this);
     var fileName = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-    console.log( fileName);
+    console.log(fileName);
 
     var files = input.get(0).files;
 
     sendFileToServer(files);
 });
 
-var sendFileToServer = function(files){
+var sendFileToServer = function (files) {
     var formData = new FormData();
 
     for (var i = 0; i < 1; i++) {
@@ -21,7 +21,7 @@ var sendFileToServer = function(files){
 }
 
 
-function sendFile(data){
+function sendFile(data) {
     $.ajax({
         url: 'upload',
         type: 'POST',
@@ -30,16 +30,10 @@ function sendFile(data){
         dataType: 'json',
         processData: false, // Don't process the files
         contentType: false, // Set content type to false as jQuery will tell the server its a query string request
-        success: function(data, textStatus, jqXHR)
-        {
-            if (SVG.supported) {
-                init(data)
-            } else {
-                alert('SVG not supported')
-            }
+        success: function (data, textStatus, jqXHR) {
+            prepareDiagram(data)
         },
-        error: function(jqXHR, textStatus, errorThrown)
-        {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log('ERRORS: ' + textStatus);
         }
     });

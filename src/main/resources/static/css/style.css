@@ -3,6 +3,7 @@
     overflow: hidden;
     margin: 8px;
 }
+
 .btn-file input[type=file] {
     position: absolute;
     top: 0;
@@ -17,7 +18,53 @@
     cursor: inherit;
     display: block;
 }
+
 input[readonly] {
     background-color: white !important;
     cursor: text !important;
+}
+
+.toolbar {
+    height: 350px;
+    width: 55px;
+    background: #FAFAFA;
+    border: solid 1px #CCC;
+    border-radius: 2px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    position: absolute;
+    top: 95px;
+    left: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 99;
+}
+
+.event-tb {
+    background: url("../img/eventmin.png") no-repeat center;
+    width: 100%;
+    height: 45px;
+}
+
+.gate-tb {
+    background: url("../img/gate-min.png") no-repeat center;
+    width: 100%;
+    height: 45px;
+}
+
+.task-lab-tb {
+    background: url("../img/task-lab-min.png") no-repeat center;
+    width: 100%;
+    height: 45px;
+}
+
+.task-research-tb {
+    background: url("../img/task-resarch-min.png") no-repeat center;
+    width: 100%;
+    height: 45px;
+}
+
+div.event-tb:hover{
+    background: url("../img/event-hover-min.png") no-repeat center;
+    width: 100%;
+    height: 45px;
 }

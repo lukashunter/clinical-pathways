@@ -7,7 +7,15 @@
 <body>
 <nav th:replace="fragments/navbar :: navbar"></nav>
 
-<div th:id="drawing"></div>
+<div class="toolbar">
+    <div class="event-tb" onclick="createStart(event)"></div>
+    <div class="gate-tb"></div>
+    <div class="task-lab-tb"></div>
+    <div class="task-research-tb"></div>
+</div>
+
+<div th:id="drawing" style="position: absolute; top: 50px; left: 0px">
+</div>
 
 </body>
 </html>
