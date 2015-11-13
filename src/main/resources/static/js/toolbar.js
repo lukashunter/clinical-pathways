@@ -4,8 +4,23 @@ function createStart(event){
     svgElementFactory(ElementTypeEnum.EVENT, activity);
 }
 
+function createGate(event){
+    var activity = createActivity(event);
+    svgElementFactory(ElementTypeEnum.GATE, activity);
+}
+
+function createLab(event){
+    var activity = createActivity(event);
+    svgElementFactory(ElementTypeEnum.TASK_LAB, activity);
+}
+
+function createResearch(event){
+    var activity = createActivity(event);
+    svgElementFactory(ElementTypeEnum.TASK_RESEARCH, activity);
+}
+
 function createActivity(event){
-    var coordinates = {xcoordinate: event.x, ycoordinate: event.y};
+    var coordinates = {xcoordinate: 150, ycoordinate: 70};
 
     var nodeGraphicsInfos = {nodeGraphicsInfo: []};
     nodeGraphicsInfos.nodeGraphicsInfo.push(

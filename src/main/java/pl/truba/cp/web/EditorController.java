@@ -18,11 +18,6 @@ public class EditorController {
     @Autowired
     private XMLService xmlService;
 
-    @RequestMapping
-    String editor() {
-        return "editor";
-    }
-
     @RequestMapping(value = "/load", method = RequestMethod.GET)
     @ResponseBody
     public PackageType getPackageType(){

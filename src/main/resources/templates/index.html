@@ -7,14 +7,26 @@
 <body>
 <nav th:replace="fragments/navbar :: navbar"></nav>
 
-<div class="toolbar">
-    <div class="event-tb" onclick="createStart(event)"></div>
-    <div class="gate-tb"></div>
-    <div class="task-lab-tb"></div>
-    <div class="task-research-tb"></div>
-</div>
-
-<div th:id="drawing" style="position: absolute; top: 50px; left: 0px">
+<div class="editor">
+    <div class="left">
+        <div class="toolbar">
+            <div class="event-tb" onmousedown="createStart(event)"></div>
+            <div class="gate-tb" onmousedown="createGate(event)"></div>
+            <div class="task-lab-tb" onmousedown="createLab(event)"></div>
+            <div class="task-research-tb" onmousedown="createResearch(event)"></div>
+        </div>
+    </div>
+    <div class="right">
+        <div th:id="drawing"></div>
+        <div class="context-menu hide">
+            <div id="editId"><i class="fa fa-pencil fa-2x"></i></div>
+            <div id="connectId">
+                <i style="transform:rotate(-45deg); -webkit-transform:rotate(-45deg); -moz-transform:rotate(-45deg); -o-transform:rotate(-45deg);"
+                   class="fa fa-long-arrow-right fa-2x"></i>
+            </div>
+            <div id="trashId"><i class="fa fa-trash fa-2x"></i></div>
+        </div>
+    </div>
 </div>
 
 </body>

@@ -31,7 +31,13 @@ function svgElementFactory(elementType, activity) {
         toPaths: []
     };
 
-    group.draggable();
+    group.draggable({
+        minX: 2
+        , minY: 2
+        , maxX: window.innerWidth - 57
+        , maxY: window.innerHeight - 82
+    });
+
     registerEventHandler(group);
 
     if (elementType != ElementTypeEnum.EVENT) prepareNodeDescription(activity);
@@ -51,8 +57,6 @@ function getDimension(activity) {
             width: nodeGraphicsInfo.width
         };
     }
-
-    return {};
 }
 
 function prepareEvent(activity) {
@@ -60,12 +64,9 @@ function prepareEvent(activity) {
 
     var group = EDITOR.draw.group();
     var circle = group.circle(50);
-    group.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
+    group.cx(dimension.coordinates.xcoordinate).cy(dimension.coordinates.ycoordinate);
 
-    /*    var text = group.text('Start').dx(8).dy(10);
-     text.font({
-     size: 14
-     })*/
+    group.on('click', handlerSelectEvent);
 
     var gradient = group.gradient('radial', function (stop) {
         stop.at(0, '#E8FFE0');
@@ -86,7 +87,7 @@ function prepareTaskResearch(activity) {
 
     var group = EDITOR.draw.group();
     var rect = group.rect(140, 90).radius(10);
-    group.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
+    group.center(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
 
     var gradient = group.gradient('radial', function (stop) {
         stop.at(0, '#c7f1ff');
@@ -107,7 +108,7 @@ function prepareTaskLab(activity) {
 
     var group = EDITOR.draw.group();
     var rect = group.rect(140, 90).radius(10);
-    group.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
+    group.center(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
 
     var gradient = group.gradient('radial', function (stop) {
         stop.at(0, '#FFD4CA');
@@ -128,7 +129,7 @@ function prepareGateway(activity) {
 
     var group = EDITOR.draw.group();
     var rect = group.rect(80, 80);
-    group.move(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
+    group.center(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
     rect.rotate(45);
 
     var gradient = group.gradient('radial', function (stop) {
@@ -144,31 +145,3 @@ function prepareGateway(activity) {
 
     return {group: group, svgElement: rect};
 }
-
-function preparePath(from, to) {
-    var draw = EDITOR.draw;
-    var path = draw.path("M " + from.x + " " + from.y + " L " + to.x + " " + to.y);
-
-    path.attr({
-        stroke: 'red',
-        'stroke-width': 1
-    });
-
-    path.fill('none').stroke({width: 1});
-
-    prepareMarker(path);
-
-    path.back();
-
-    return path;
-}
-
-function prepareMarker(path) {
-    var marker = EDITOR.draw.marker(10, 10)
-    marker.path().attr({
-        d: "M 0 0 L 10 5 L 0 10 z"
-    });
-    marker.ref(path.length() / 2, 5);
-    path.marker('end', marker);
-}
-

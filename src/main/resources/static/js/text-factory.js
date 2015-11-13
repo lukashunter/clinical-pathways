@@ -71,7 +71,9 @@ function splitTaskName(taskName, elementType) {
 
     var newTaskNameArray = [];
 
-    if (taskName && taskName.length < 18) {
+    if(!taskName) return newTaskNameArray;
+
+    if (taskName.length < 18) {
         newTaskNameArray.push(taskName);
         return newTaskNameArray;
     }
@@ -106,8 +108,8 @@ function prepareConnectionDescription(transition) {
 }
 
 function computeTextPosition(fromId, toId, desc) {
-    var from = computePostion(fromId);
-    var to = computePostion(toId);
+    var from = computeCenterPostion(fromId);
+    var to = computeCenterPostion(toId);
 
     var x = (from.x + to.x) / 2;
     var y = (from.y + to.y) / 2;
@@ -126,7 +128,6 @@ function redrawConnectionDescritpion(path){
     var coord = computeTextPosition(fromId, toId, content);
     var text = path.text;
 
-    console.log('x: '+coord.x + 'y: '+coord.y);
     text.x(coord.x).y(coord.y);
 }
 
