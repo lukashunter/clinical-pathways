@@ -1,26 +1,26 @@
-function prepareDiagram(data) {
+function readDiagram(data) {
     EDITOR.xpdl = data;
     if (EDITOR.xpdl.workflowProcesses != null) {
         const workflowProcessArray = EDITOR.xpdl.workflowProcesses.workflowProcess;
-        prepareWorkflowProcesses(workflowProcessArray);
+        readWorkflowProcesses(workflowProcessArray);
     }
 }
 
-function prepareWorkflowProcesses(workflowProcessList) {
+function readWorkflowProcesses(workflowProcessList) {
     _.forEach(workflowProcessList, function (workflowProcess) {
         if (workflowProcess.activities != null) {
             const activityArray = workflowProcess.activities.activity;
-            prepareActivities(activityArray);
+            readActivities(activityArray);
         }
 
         if (workflowProcess.transitions != null) {
             const transitionArray = workflowProcess.transitions.transition;
-            prepareTransitions(transitionArray);
+            readTransitions(transitionArray);
         }
     })
 }
 
-function prepareActivities(activitiesList) {
+function readActivities(activitiesList) {
     _.forEach(activitiesList, function (activity) {
         var elementType = findElement(activity);
         svgElementFactory(elementType, activity);
@@ -77,7 +77,7 @@ function findTaskLab(task) {
     return false;
 }
 
-function prepareTransitions(transitionList) {
+function readTransitions(transitionList) {
     _.forEach(transitionList, function (transition) {
         prepareConnection(transition);
     });

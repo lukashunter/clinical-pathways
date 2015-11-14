@@ -8,13 +8,13 @@ function prepareNodeDescription(activity) {
     var dy = getDy(taskNameArray, type);
     var dx = getDx(taskNameArray, type);
 
-    var text = group.text(function (add) {
+    var svgText = group.text(function (add) {
         _.forEach(taskNameArray, function (data) {
             add.tspan(data).dx(dx).newLine()
         })
     }).dy(dy);
 
-    EDITOR.elementsMap[activity.id].text = text;
+    EDITOR.elementsMap[activity.id].svgText = svgText;
 }
 
 function getDx(taskNameArray, type) {
@@ -129,5 +129,11 @@ function redrawConnectionDescritpion(path){
     var text = path.text;
 
     text.x(coord.x).y(coord.y);
+}
+
+function removeConnectionDescription(path){
+    if(path.text){
+        path.text.remove();
+    }
 }
 

@@ -80,3 +80,11 @@ div.event-tb:hover {
 .hide {
     visibility: hidden;
 }
+
+.textarea-task{
+    position: absolute;
+}
+
+.textarea-gate{
+    position: absolute;
+}

@@ -6,10 +6,7 @@ function prepareConnection(transition) {
     var to = computeCenterPostion(toId);
 
     var path = drawPath(from, to);
-
-    var desc = prepareConnectionDescription(transition);
-
-    path.text = desc;
+    path.text = prepareConnectionDescription(transition);
 
     EDITOR.elementsMap[fromId].fromPaths.push(path);
     EDITOR.elementsMap[toId].toPaths.push(path);
@@ -30,9 +27,7 @@ function drawPath(from, to) {
     });
 
     path.fill('none').stroke({width: 1});
-
     drawMarker(path);
-
     path.back();
 
     return path;
@@ -57,7 +52,7 @@ function computeCenterPostion(elementId) {
             center = getGateCenter(svgElement);
             break;
         default:{
-            center = getDefaultCenter(svgElement);
+            center = getCenter(svgElement);
             break;
         }
     }
@@ -65,7 +60,7 @@ function computeCenterPostion(elementId) {
     return center;
 }
 
-function getDefaultCenter(svgElement) {
+function getCenter(svgElement) {
     var tbox = svgElement.tbox();
 
     return {
@@ -79,23 +74,27 @@ function getGateCenter(svgElement) {
     var tbox = svgElement.tbox();
 
     var x = tbox.x;
-    var y = tbox.cy;
+    var y = tbox.y;
 
     return {
         x: x,
-        y: y
+        y: y + ((80*Math.sqrt(2))/2)
     }
 }
 
-function registerEventHandler(group){
+function registerEventDragHandler(group){
     var contextMenu = $('.context-menu');
+
+    group.on('dragstart', function(event){
+        contextMenu.addClass('hide');
+    })
 
     group.on('dragmove', function(event){
         redrawPaths(group);
-        contextMenu.addClass('hide');
     })
 }
 
+// on drag element
 function redrawPaths(group) {
     var element = EDITOR.elementsMap[group.activityId];
     var coord = computeCenterPostion(group.activityId);
@@ -123,7 +122,38 @@ function updateMarker(path) {
     marker.ref(path.length() / 2, 5);
 }
 
-function drawNewPath(activityId){
-    var centerPostion = computeCenterPostion(activityId);
+function createNewPath(activityId){
+    connectMode.active = true;
+    connectMode.fromId = activityId;
 
+    var fromPosition = computeCenterPostion(activityId);
+    connectMode.path = drawNewPath(fromPosition);
+
+    $('#drawing').on('mousemove', function (event) {
+        redrawNewPath(connectMode.path, event);
+    });
+}
+
+function drawNewPath(fromPosition){
+    var draw = EDITOR.draw;
+    var path = draw.path("M " + fromPosition.x + " " + fromPosition.y + " L " + (cursor.x-55) + " " + (cursor.y-75));
+
+    path.attr({
+        stroke: 'red',
+        'stroke-width': 1
+    });
+
+    path.fill('none').stroke({width: 1});
+    drawMarker(path);
+    path.back();
+
+    return path;
+}
+
+function redrawNewPath(path, event){
+    var pathArray = path.array();
+    var M = pathArray.value[0];
+    path.plot('M' + M[1] + ',' + M[2] + 'L' + (event.clientX - 55) + ',' + (event.clientY - 75));
+    updateMarker(path);
+//    redrawConnectionDescritpion(path);
 }

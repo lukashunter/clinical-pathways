@@ -20,7 +20,7 @@ public class EditorController {
 
     @RequestMapping(value = "/load", method = RequestMethod.GET)
     @ResponseBody
-    public PackageType getPackageType(){
+    public PackageType getPackageType() {
         return xmlService.getPackageType();
     }
 }

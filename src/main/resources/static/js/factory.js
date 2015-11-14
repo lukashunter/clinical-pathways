@@ -1,21 +1,5 @@
 function svgElementFactory(elementType, activity) {
-    var wrapper;
-
-    switch (elementType) {
-        case ElementTypeEnum.EVENT:
-            wrapper = prepareEvent(activity);
-            break;
-        case ElementTypeEnum.TASK_RESEARCH:
-            wrapper = prepareTaskResearch(activity);
-            break;
-        case ElementTypeEnum.TASK_LAB:
-            wrapper = prepareTaskLab(activity);
-            break;
-        case ElementTypeEnum.GATE:
-            wrapper = prepareGateway(activity);
-            break;
-    }
-
+    var wrapper = prepareElement(elementType, activity);
     var group = wrapper.group;
     var svgElement = wrapper.svgElement;
 
@@ -31,18 +15,35 @@ function svgElementFactory(elementType, activity) {
         toPaths: []
     };
 
-    group.draggable({
-        minX: 2
-        , minY: 2
-        , maxX: window.innerWidth - 57
-        , maxY: window.innerHeight - 82
-    });
-
-    registerEventHandler(group);
+    setupDragConstraint(group);
+    registerEventDragHandler(group);
+    registerEventSelectionHandler(group);
 
     if (elementType != ElementTypeEnum.EVENT) prepareNodeDescription(activity);
 
     return svgElement;
+}
+
+function prepareElement(elementType, activity) {
+    var dimension = getDimension(activity);
+    var wrapper;
+
+    switch (elementType) {
+        case ElementTypeEnum.EVENT:
+            wrapper = drawEvent(dimension);
+            break;
+        case ElementTypeEnum.TASK_RESEARCH:
+            wrapper = drawTaskResearch(dimension);
+            break;
+        case ElementTypeEnum.TASK_LAB:
+            wrapper = drawTaskLab(dimension);
+            break;
+        case ElementTypeEnum.GATE:
+            wrapper = drawGateway(dimension);
+            break;
+    }
+
+    return wrapper;
 }
 
 function getDimension(activity) {
@@ -59,14 +60,10 @@ function getDimension(activity) {
     }
 }
 
-function prepareEvent(activity) {
-    var dimension = getDimension(activity);
-
-    var group = EDITOR.draw.group();
+function drawEvent(dimension) {
+     var group = EDITOR.draw.group();
     var circle = group.circle(50);
     group.cx(dimension.coordinates.xcoordinate).cy(dimension.coordinates.ycoordinate);
-
-    group.on('click', handlerSelectEvent);
 
     var gradient = group.gradient('radial', function (stop) {
         stop.at(0, '#E8FFE0');
@@ -82,9 +79,7 @@ function prepareEvent(activity) {
     return {group: group, svgElement: circle};
 }
 
-function prepareTaskResearch(activity) {
-    var dimension = getDimension(activity);
-
+function drawTaskResearch(dimension) {
     var group = EDITOR.draw.group();
     var rect = group.rect(140, 90).radius(10);
     group.center(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
@@ -103,9 +98,7 @@ function prepareTaskResearch(activity) {
     return {group: group, svgElement: rect};
 }
 
-function prepareTaskLab(activity) {
-    var dimension = getDimension(activity);
-
+function drawTaskLab(dimension) {
     var group = EDITOR.draw.group();
     var rect = group.rect(140, 90).radius(10);
     group.center(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
@@ -124,9 +117,7 @@ function prepareTaskLab(activity) {
     return {group: group, svgElement: rect};
 }
 
-function prepareGateway(activity) {
-    var dimension = getDimension(activity);
-
+function drawGateway(dimension) {
     var group = EDITOR.draw.group();
     var rect = group.rect(80, 80);
     group.center(dimension.coordinates.xcoordinate, dimension.coordinates.ycoordinate);
@@ -144,4 +135,13 @@ function prepareGateway(activity) {
     });
 
     return {group: group, svgElement: rect};
+}
+
+function setupDragConstraint(group) {
+    group.draggable({
+        minX: 2
+        , minY: 2
+        , maxX: window.innerWidth - 57
+        , maxY: window.innerHeight - 82
+    });
 }
