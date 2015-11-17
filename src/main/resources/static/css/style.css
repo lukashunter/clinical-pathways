@@ -88,3 +88,11 @@ div.event-tb:hover {
 .textarea-gate{
     position: absolute;
 }
+
+.textarea-path{
+    position: absolute;
+}
+
+.flex{
+    display: flex;
+}
