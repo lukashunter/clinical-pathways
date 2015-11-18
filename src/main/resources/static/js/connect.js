@@ -45,7 +45,7 @@ function drawMarker(path) {
     path.marker('end', marker);
 }
 
-function computeCenterPostion(elementId) {
+var computeCenterPostion = function(elementId) {
     const svgElement = EDITOR.elementsMap[elementId].svgElement;
     const elementType = EDITOR.elementsMap[elementId].type;
 

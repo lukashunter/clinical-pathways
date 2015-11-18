@@ -1,4 +1,5 @@
 function readDiagram(data) {
+    console.log(data);
     EDITOR.xpdl = data;
     if (EDITOR.xpdl.workflowProcesses != null) {
         const workflowProcessArray = EDITOR.xpdl.workflowProcesses.workflowProcess;

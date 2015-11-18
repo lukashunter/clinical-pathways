@@ -4,12 +4,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.WebApplicationContext;
-import pl.truba.cp.bean.v21.PackageType;
+import pl.truba.cp.bean.v21.*;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.*;
 import java.io.File;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Łukasz on 2015-10-17.
@@ -36,5 +37,118 @@ public class XMLService {
 
     public PackageType getPackageType(){
         return packageType;
+    }
+
+    public File saveXMLFile() {
+        PackageType packageType = preparePackageType();
+
+        File fileXML = null;
+        try {
+            fileXML = saveXML(packageType);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+
+        return fileXML;
+    }
+
+    private File saveXML(PackageType packageType) throws JAXBException {
+        File xmlFile = new File("download/"+getUUID().toString() +".xpdl");
+
+        JAXBContext jaxbContext = JAXBContext.newInstance(PackageType.class);
+        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+        jaxbMarshaller.marshal(packageType, xmlFile);
+        jaxbMarshaller.marshal(packageType, System.out);
+
+        return xmlFile;
+    }
+
+    private PackageType preparePackageType() {
+        PackageType packageType = new PackageType();
+
+        PackageHeader packageHeader = getPackageHeader();
+        packageType.setPackageHeader(packageHeader);
+
+        RedefinableHeader redefinableHeader = getRedefinableHeader();
+        packageType.setRedefinableHeader(redefinableHeader);
+
+        WorkflowProcesses workflowProcesses = getWorkflowProcesses();
+        packageType.setWorkflowProcesses(workflowProcesses);
+
+        return packageType;
+    }
+
+    private WorkflowProcesses getWorkflowProcesses() {
+        WorkflowProcesses workflowProcesses = new WorkflowProcesses();
+        List<ProcessType> workflowProcessList = workflowProcesses.getWorkflowProcess();
+
+        ProcessType processType = new ProcessType();
+        processType.setId(getUUID().toString());
+        processType.setName("Main process");
+
+        ProcessHeader processHeader = getProcessHeader();
+        processType.setProcessHeader(processHeader);
+
+        RedefinableHeader redefinableHeader = getRedefinableHeader();
+        processType.setRedefinableHeader(redefinableHeader);
+
+        Activities activities = new Activities();
+        List<Activity> activityList = activities.getActivity();
+
+        return workflowProcesses;
+    }
+
+    private ProcessHeader getProcessHeader() {
+        ProcessHeader processHeader = new ProcessHeader();
+        Created created = new Created();
+        created.setValue(new Date().toString());
+        processHeader.setCreated(created);
+        return processHeader;
+    }
+
+    private RedefinableHeader getRedefinableHeader() {
+        RedefinableHeader redefinableHeader = new RedefinableHeader();
+
+        Author author = new Author();
+        author.setValue("Podac nazwe autora");
+        redefinableHeader.setAuthor(author);
+
+        Version version = new Version();
+        version.setValue("1.0");
+        redefinableHeader.setVersion(version);
+
+        Countrykey countrykey = new Countrykey();
+        countrykey.setValue("PL");
+        redefinableHeader.setCountrykey(countrykey);
+        return redefinableHeader;
+    }
+
+    private PackageHeader getPackageHeader() {
+        PackageHeader packageHeader = new PackageHeader();
+
+        XPDLVersion xpdlVersion = new XPDLVersion();
+        xpdlVersion.setValue("2.1");
+        packageHeader.setXPDLVersion(xpdlVersion);
+
+        Vendor vendor = new Vendor();
+        vendor.setValue("Clinical Pathways by Lukas Truba");
+        packageHeader.setVendor(vendor);
+
+        Created created = new Created();
+        created.setValue(new Date().toString());
+        packageHeader.setCreated(created);
+
+        Description description = new Description();
+        description.setValue("Nazwa diagramu uzupełnic pozniej");
+        packageHeader.setDescription(description);
+        return packageHeader;
+    }
+
+    private UUID getUUID(){
+        UUID uniqueKey = UUID.randomUUID();
+        return uniqueKey;
     }
 }

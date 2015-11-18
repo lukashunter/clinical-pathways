@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Package xmlns="http://www.wfmc.org/2008/XPDL2.1">
+    <PackageHeader>
+        <XPDLVersion>2.1</XPDLVersion>
+        <Vendor>Clinical Pathways by Lukas Truba</Vendor>
+        <Created>Wed Nov 18 20:19:32 CET 2015</Created>
+        <Description>Nazwa diagramu uzupełnic pozniej</Description>
+    </PackageHeader>
+    <RedefinableHeader>
+        <Author>Podac nazwe autora</Author>
+        <Version>1.0</Version>
+        <Countrykey>PL</Countrykey>
+    </RedefinableHeader>
+</Package>
