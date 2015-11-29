@@ -99,7 +99,7 @@ var getTextNodeBy = function(activityId){
     var svgText = EDITOR.elementsMap[activityId].svgText;
     var text = '';
     if(typeof svgText !== 'undefined'){
-        text = svgText.text();
+        text = svgText.node.textContent;
     }
 
     return text;

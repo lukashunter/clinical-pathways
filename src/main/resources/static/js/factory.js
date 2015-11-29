@@ -1,4 +1,4 @@
-function svgElementFactory(elementType, activity) {
+var svgElementFactory = function(elementType, activity) {
     var wrapper = prepareElement(elementType, activity);
     var group = wrapper.group;
     var svgElement = wrapper.svgElement;
@@ -24,7 +24,7 @@ function svgElementFactory(elementType, activity) {
     return svgElement;
 }
 
-function prepareElement(elementType, activity) {
+var prepareElement = function(elementType, activity) {
     var dimension = getDimension(activity);
     var wrapper;
 

@@ -8,6 +8,7 @@
 
 package pl.truba.cp.bean.v21;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +21,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.w3c.dom.Element;
 
 
@@ -54,8 +57,10 @@ public class Coordinates {
 
     @XmlAnyElement(lax = true)
     protected List<java.lang.Object> any;
+    @JsonProperty("x")
     @XmlAttribute(name = "XCoordinate")
     protected Double xCoordinate;
+    @JsonProperty("y")
     @XmlAttribute(name = "YCoordinate")
     protected Double yCoordinate;
     @XmlAnyAttribute

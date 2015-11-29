@@ -5,10 +5,19 @@
 <head th:fragment="head">
     <title>Clinical Pathways - editor</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
     <!--jQuery-->
     <script th:src="@{/js/components/jquery/dist/jquery.min.js}" scr="js/components/jquery/dist/jquery.min.js"></script>
     <!--/jQuery-->
+
+    <!-- popup -->
+    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'/>
+    <link rel="stylesheet" href="js/components/popup/css/reset.css"/>
+    <link rel="stylesheet" href="js/components/popup/css/style.css"/>
+    <script src="js/components/popup/js/modernizr.js"></script>
+    <script src="js/components/popup/js/main.js"></script>
+    <!-- /popup -->
 
     <!--Bootstrap-->
     <link rel="stylesheet" th:href="@{/js/components/bootstrap/dist/css/bootstrap.css}"/>
@@ -36,12 +45,13 @@
     <script th:src="@{/js/text-node.js}" scr="js/text-node.js"></script>
     <script th:src="@{/js/text-path.js}" scr="js/text-path.js"></script>
     <script th:src="@{/js/toolbar.js}" scr="js/toolbar.js"></script>
-    <script th:src="@{/js/context-menu.js}" scr="js/context-menu.js"></script>
-    <script th:src="@{/js/context-edit.js}" scr="js/context-edit.js"></script>
-    <script th:src="@{/js/context-connect.js}" scr="js/context-connect.js"></script>
-    <script th:src="@{/js/context-remove.js}" scr="js/context-remove.js"></script>
+    <script th:src="@{/js/context-menu/context-menu.js}" scr="js/context-menu/context-menu.js"></script>
+    <script th:src="@{/js/context-menu/context-edit.js}" scr="js/context-menu/context-edit.js"></script>
+    <script th:src="@{/js/context-menu/context-connect.js}" scr="js/context-menu/context-connect.js"></script>
+    <script th:src="@{/js/context-menu/context-remove.js}" scr="js/context-menu/context-remove.js"></script>
     <script th:src="@{/js/read-xpdl.js}" scr="js/read-xpdl.js"></script>
     <script th:src="@{/js/write-xpdl.js}" scr="js/write-xpdl.js"></script>
+    <script th:src="@{/js/persist.js}" scr="js/persist.js"></script>
     <!--/mine-->
 
 </head>

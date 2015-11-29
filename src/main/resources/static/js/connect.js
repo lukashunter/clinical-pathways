@@ -1,4 +1,4 @@
-function prepareConnection(transition) {
+var prepareConnection = function(transition) {
     var fromId = transition.from;
     var toId = transition.to;
 

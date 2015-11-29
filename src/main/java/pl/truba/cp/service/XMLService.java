@@ -5,9 +5,11 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.WebApplicationContext;
 import pl.truba.cp.bean.v21.*;
+import pl.truba.cp.type.wrapper.XpdlWrapper;
 
 import javax.xml.bind.*;
 import java.io.File;
+import java.io.StringWriter;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -39,8 +41,8 @@ public class XMLService {
         return packageType;
     }
 
-    public File saveXMLFile() {
-        PackageType packageType = preparePackageType();
+    public File saveXMLFile(XpdlWrapper xpdlWrapper) {
+        PackageType packageType = preparePackageType(xpdlWrapper);
 
         File fileXML = null;
         try {
@@ -66,7 +68,25 @@ public class XMLService {
         return xmlFile;
     }
 
-    private PackageType preparePackageType() {
+    public String getXmlAsString(XpdlWrapper xpdlWrapper){
+        PackageType packageType = preparePackageType(xpdlWrapper);
+
+        StringWriter sw = new StringWriter();
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(PackageType.class);
+            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+            jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+            jaxbMarshaller.marshal(packageType, sw);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+
+        return sw.toString();
+
+    }
+
+    private PackageType preparePackageType(XpdlWrapper xpdlWrapper) {
         PackageType packageType = new PackageType();
 
         PackageHeader packageHeader = getPackageHeader();
@@ -75,16 +95,23 @@ public class XMLService {
         RedefinableHeader redefinableHeader = getRedefinableHeader();
         packageType.setRedefinableHeader(redefinableHeader);
 
-        WorkflowProcesses workflowProcesses = getWorkflowProcesses();
+        WorkflowProcesses workflowProcesses = getWorkflowProcesses(xpdlWrapper);
         packageType.setWorkflowProcesses(workflowProcesses);
 
         return packageType;
     }
 
-    private WorkflowProcesses getWorkflowProcesses() {
+    private WorkflowProcesses getWorkflowProcesses(XpdlWrapper xpdlWrapper) {
         WorkflowProcesses workflowProcesses = new WorkflowProcesses();
         List<ProcessType> workflowProcessList = workflowProcesses.getWorkflowProcess();
 
+        ProcessType processType = getProcessType(xpdlWrapper);
+        workflowProcessList.add(processType);
+
+        return workflowProcesses;
+    }
+
+    private ProcessType getProcessType(XpdlWrapper xpdlWrapper) {
         ProcessType processType = new ProcessType();
         processType.setId(getUUID().toString());
         processType.setName("Main process");
@@ -97,8 +124,16 @@ public class XMLService {
 
         Activities activities = new Activities();
         List<Activity> activityList = activities.getActivity();
+        activityList.addAll(xpdlWrapper.getActivities());
 
-        return workflowProcesses;
+        Transitions transitions = new Transitions();
+        List<Transition> transitionList = transitions.getTransition();
+        transitionList.addAll(xpdlWrapper.getTransitions());
+
+        processType.setActivities(activities);
+        processType.setTransitions(transitions);
+
+        return processType;
     }
 
     private ProcessHeader getProcessHeader() {

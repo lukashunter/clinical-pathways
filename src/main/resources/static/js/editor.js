@@ -45,9 +45,21 @@ var pathIdOnHover;
         $(document).on('mouseup', '#drawing', function () {
             disableContextMode();
         });
+
+        $('#btnDownloadId').on('click', saveXPDL);
+        $('#btnRepoId').on('click', function(){
+            window.location.href = 'pathways';
+        });
+
+        $('#saveAsNewId').on('click', savePathwayAsNew);
+        $('#modifyId').on('click', modifyPathway);
     });
 
-    function initDrawing() {
+    var initDrawing = function() {
+        var drawing = document.getElementById("drawing");
+
+        if(!drawing) return;
+
         if (SVG.supported) {
             EDITOR.draw = SVG('drawing').size(window.innerWidth - 55, window.innerHeight - 80);
             EDITOR.elementsMap = {};

@@ -1,6 +1,32 @@
-var prepareActivityList = function(){
+var saveXPDL = function () {
+    var xpdLWrapper = prepareXPDL();
+    $.ajax({
+        url: 'xml',
+        type: 'POST',
+        data: JSON.stringify(xpdLWrapper),
+        cache: false,
+        dataType: 'json',
+        processData: false, // Don't process the files
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+            console.log(data);
+        }
+    });
+};
+
+var prepareXPDL = function() {
+    var activities = prepareActivityList();
+    var transitions = prepareTransitionList();
+    var xpdLWrapper = {
+        activities: activities,
+        transitions: transitions
+    };
+    return xpdLWrapper;
+}
+
+var prepareActivityList = function () {
     var activityList = [];
-    _.forOwn(EDITOR.elementsMap, function(value, key){
+    _.forOwn(EDITOR.elementsMap, function (value, key) {
         var activity = prepareActivity(key);
         activityList.push(activity);
     });
@@ -8,7 +34,7 @@ var prepareActivityList = function(){
     return activityList;
 }
 
-var prepareActivity = function(activityId){
+var prepareActivity = function (activityId) {
     var element = EDITOR.elementsMap[activityId];
 
     var activity = {};
@@ -16,14 +42,35 @@ var prepareActivity = function(activityId){
     activity.name = getTextNodeBy(activityId);
     activity.nodeGraphicsInfos = getNodeGraphicsInfosBy(activityId);
 
+    var type = getTypeByActivityId(activityId);
+
+    switch (type) {
+        case ElementTypeEnum.EVENT: {
+            activity.event =  {startEvent: {trigger: 'None'} };
+            break;
+        }
+        case ElementTypeEnum.TASK_RESEARCH: {
+            activity.implementation =  {task: {} };
+            break;
+        }
+        case ElementTypeEnum.TASK_LAB: {
+            activity.implementation =  {task: {taskService: {} } };
+            break;
+        }
+        case ElementTypeEnum.GATE: {
+            activity.route =  {};
+            break;
+        }
+    }
+
     return activity;
 }
 
-var getNodeGraphicsInfosBy = function(activityId){
+var getNodeGraphicsInfosBy = function (activityId) {
     var postion = computeCenterPostion(activityId);
     var coordinates = {
-        xCoordinate: postion.x,
-        yCoordinate: postion.y
+        x: postion.x,
+        y: postion.y
     };
 
     var nodeGraphicsInfo = {
@@ -39,5 +86,28 @@ var getNodeGraphicsInfosBy = function(activityId){
     };
 
     return nodeGraphicsInfos;
+}
 
+var prepareTransitionList = function(){
+    var transitionList = [];
+
+    _.forOwn(EDITOR.pathsMap, function (pathElement, pathId) {
+        var transition = prepareTransition(pathId);
+        transitionList.push(transition);
+    });
+
+    return transitionList;
+}
+
+var prepareTransition = function(pathId){
+    var pathElement = EDITOR.pathsMap[pathId];
+
+    var transition = {
+        id: generateUUID(),
+        from: pathElement.svgPath.fromId,
+        to: pathElement.svgPath.toId,
+        name: pathElement.svgText ? pathElement.svgText.text() : ''
+    };
+
+    return transition;
 }
