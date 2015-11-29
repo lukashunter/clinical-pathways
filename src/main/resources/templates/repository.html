@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" ng-app="app">
+
+<head th:replace="fragments/head :: head"></head>
+<script src="js/components/angular/angular.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="js/components/angular-ui-grid/ui-grid.min.css"/>
+<script src="js/components/angular-ui-grid/ui-grid.js"></script>
+
+<script>
+    var app = angular.module('app', ['ui.grid']);
+    app.controller('RepoController', function ($scope) {
+        $scope.test = 'LUKASZ';
+
+        $scope.gridOptions = {
+            columnDefs: [
+                {field: 'id', displayName: 'Id'},
+                {field: 'name', displayName: 'Name'},
+                {
+                    name: 'edit',
+                    displayName: 'Edit',
+                    cellTemplate: '<button id="editBtn" type="button" class="btn-small" ng-click="edit(row.entity)" >Edit</button> '
+                }
+            ]
+        };
+    });
+</script>
+
+<body>
+<nav th:replace="fragments/navbar :: navbar"></nav>
+<div th:replace="fragments/commitPopup :: commit"></div>
+<div ng-controller="RepoController" style="height: 100%">
+    <div class="gridStyle" ui-grid="gridOptions" style="height: 100%"></div>
+
+</div>
+</body>
+</html>
