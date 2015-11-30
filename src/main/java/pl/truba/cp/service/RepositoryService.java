@@ -10,7 +10,9 @@ import pl.truba.cp.repository.DicDiseaseRepository;
 import pl.truba.cp.repository.PathwayRepository;
 import pl.truba.cp.type.wrapper.PathwayWrapper;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Łukasz on 2015-11-26.
@@ -45,5 +47,29 @@ public class RepositoryService {
         pathwayRepository.save(pathway);
     }
 
+    public List<DicDisease> getDiseasesAll() {
+        List<DicDisease> dicDiseases = (List<DicDisease>) diseaseRepository.findAll();
+
+        return dicDiseases;
+    }
+
+    public List<PathwayWrapper> getPathWaysAll(){
+        Iterable<Pathway> pathways = pathwayRepository.findAll();
+
+        List<PathwayWrapper> pathwayWrapperList = new ArrayList<>();
+        for (Pathway pathway : pathways) {
+            PathwayWrapper pathwayWrapper = new PathwayWrapper();
+            pathwayWrapper.setDiseaseId(pathway.getDicDisease().getId());
+            pathwayWrapper.setDiseaseName(pathway.getDicDisease().getName());
+            pathwayWrapper.setNamePathway(pathway.getName());
+            pathwayWrapper.setComment(pathway.getComment());
+            pathwayWrapper.setVersion(pathway.getComment());
+            pathwayWrapper.setXpdlWrapper(pathwayWrapper.getXpdlWrapper());
+
+            pathwayWrapperList.add(pathwayWrapper);
+        }
+
+        return pathwayWrapperList;
+    }
 
 }

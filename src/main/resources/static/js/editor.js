@@ -53,6 +53,7 @@ var pathIdOnHover;
 
         $('#saveAsNewId').on('click', savePathwayAsNew);
         $('#modifyId').on('click', modifyPathway);
+
     });
 
     var initDrawing = function() {

@@ -10,11 +10,10 @@
             <div class="form-group">
                 <label for="diseaseId">Choroba</label>
                 <select id="diseaseId" class="form-control">
-                    <option value="one">One</option>
-                    <option value="two">Two</option>
-                    <option value="three">Three</option>
-                    <option value="four">Four</option>
-                    <option value="five">Five</option>
+                    <option th:each="d : ${diseases}"
+                            th:value="${d.id}"
+                            th:text="${d.name}">
+                    </option>
                 </select>
             </div>
             <div class="form-group">

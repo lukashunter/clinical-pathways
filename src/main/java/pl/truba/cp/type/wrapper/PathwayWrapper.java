@@ -5,6 +5,8 @@ package pl.truba.cp.type.wrapper;
  */
 public class PathwayWrapper {
     Integer diseaseId;
+    String diseaseName;
+
     String namePathway;
     String comment;
     String version;
@@ -16,6 +18,14 @@ public class PathwayWrapper {
 
     public void setDiseaseId(Integer diseaseId) {
         this.diseaseId = diseaseId;
+    }
+
+    public String getDiseaseName() {
+        return diseaseName;
+    }
+
+    public void setDiseaseName(String diseaseName) {
+        this.diseaseName = diseaseName;
     }
 
     public String getNamePathway() {

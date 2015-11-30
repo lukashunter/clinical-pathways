@@ -96,3 +96,7 @@ div.event-tb:hover {
 .flex{
     display: flex;
 }
+
+textarea[id=commentId] {
+    resize: none;
+}

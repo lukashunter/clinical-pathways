@@ -1,6 +1,8 @@
 package pl.truba.cp.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Łukasz on 2015-11-26.
@@ -19,6 +21,9 @@ public class User {
     private String login;
     private String password;
     private String status;
+
+    @OneToMany(mappedBy = "createByUser")
+    private Set<Pathway> pathwaysSet = new HashSet<>();
 
     public User(){}
 
@@ -84,6 +89,14 @@ public class User {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Set<Pathway> getPathwaysSet() {
+        return pathwaysSet;
+    }
+
+    public void setPathwaysSet(Set<Pathway> pathwaysSet) {
+        this.pathwaysSet = pathwaysSet;
     }
 
     @Override

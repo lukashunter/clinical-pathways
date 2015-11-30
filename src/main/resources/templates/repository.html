@@ -10,13 +10,13 @@
 
 <script>
     var app = angular.module('app', ['ui.grid']);
-    app.controller('RepoController', function ($scope) {
-        $scope.test = 'LUKASZ';
-
+    app.controller('RepoController', function ($scope, $http) {
         $scope.gridOptions = {
             columnDefs: [
-                {field: 'id', displayName: 'Id'},
-                {field: 'name', displayName: 'Name'},
+                {field: 'diseaseName', displayName: 'Nazwa choroby'},
+                {field: 'namePathway', displayName: 'Nazwa ścieżki klinicznej'},
+                {field: 'version', displayName: 'Wersja'},
+                {field: 'comment', displayName: 'Komentarz'},
                 {
                     name: 'edit',
                     displayName: 'Edit',
@@ -24,13 +24,20 @@
                 }
             ]
         };
+
+        $scope.init = function(){
+            $http.get("repository/pathways").then(function(response){
+                console.log(response);
+                $scope.gridOptions.data = response.data;
+            });
+        }
     });
 </script>
 
 <body>
 <nav th:replace="fragments/navbar :: navbar"></nav>
 <div th:replace="fragments/commitPopup :: commit"></div>
-<div ng-controller="RepoController" style="height: 100%">
+<div ng-controller="RepoController" data-ng-init="init()" style="height: 100%">
     <div class="gridStyle" ui-grid="gridOptions" style="height: 100%"></div>
 
 </div>
