@@ -115,20 +115,4 @@ public class Pathway {
     public void setModificationDate(Date modificationDate) {
         this.modificationDate = modificationDate;
     }
-
-    @Override
-    public String toString() {
-        return "Pathway{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", comment='" + comment + '\'' +
-                ", version='" + version + '\'' +
-                ", xpdl='" + xpdl + '\'' +
-                ", dicDisease=" + dicDisease +
-                ", createByUser=" + createByUser +
-                ", creationDate=" + creationDate +
-                ", modifyByUser=" + modifyByUser +
-                ", modificationDate=" + modificationDate +
-                '}';
-    }
 }

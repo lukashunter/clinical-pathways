@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.truba.cp.service.XMLService;
 import pl.truba.cp.type.wrapper.XpdlWrapper;
 
+import java.io.File;
+
 /**
  * Created by Łukasz on 2015-11-18.
  */
@@ -18,8 +20,11 @@ public class XMLController {
     @Autowired
     XMLService xmlService;
 
-    @RequestMapping(method = RequestMethod.POST)
-    public void saveXML(@RequestBody XpdlWrapper xpdlWrapper) {
-        xmlService.saveXMLFile(xpdlWrapper);
+    @RequestMapping(value = "/save",method = RequestMethod.POST)
+    public String saveXML(@RequestBody XpdlWrapper xpdlWrapper) {
+        File file = xmlService.saveXMLFile(xpdlWrapper);
+        String fileName = file.getName();
+
+        return fileName;
     }
 }

@@ -4,13 +4,23 @@ package pl.truba.cp.type.wrapper;
  * Created by Łukasz on 2015-11-28.
  */
 public class PathwayWrapper {
+    Integer pathwayId;
     Integer diseaseId;
     String diseaseName;
 
     String namePathway;
     String comment;
     String version;
+    String xpdl;
     XpdlWrapper xpdlWrapper;
+
+    public Integer getPathwayId() {
+        return pathwayId;
+    }
+
+    public void setPathwayId(Integer pathwayId) {
+        this.pathwayId = pathwayId;
+    }
 
     public Integer getDiseaseId() {
         return diseaseId;
@@ -58,6 +68,14 @@ public class PathwayWrapper {
 
     public void setXpdlWrapper(XpdlWrapper xpdlWrapper) {
         this.xpdlWrapper = xpdlWrapper;
+    }
+
+    public String getXpdl() {
+        return xpdl;
+    }
+
+    public void setXpdl(String xpdl) {
+        this.xpdl = xpdl;
     }
 
     @Override

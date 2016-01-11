@@ -3,6 +3,7 @@ package pl.truba.cp.service;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import pl.truba.cp.config.AppProperties;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -23,7 +24,7 @@ public class FileService {
         try {
             byte[] bytes = multipartFile.getBytes();
             BufferedOutputStream stream =
-                    new BufferedOutputStream(new FileOutputStream(new File("upload/" + name + ".xpdl")));
+                    new BufferedOutputStream(new FileOutputStream(new File(AppProperties.PATH_XPDL + name + ".xpdl")));
             stream.write(bytes);
             stream.close();
         } catch (Exception e) {

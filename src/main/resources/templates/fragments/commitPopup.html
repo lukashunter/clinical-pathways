@@ -4,34 +4,34 @@
 <div th:fragment="commit" class="cd-popup" role="alert">
     <div class="cd-popup-container">
         <div style="height: 10px"></div>
-        <span>Zapis ścieżki klinicznej w repozytorium</span>
+        <span>Saving a clinical pathway onto the repository</span>
         <div style="height: 10px"></div>
         <form style="width: 80%; margin-left: auto; margin-right: auto">
             <div class="form-group">
-                <label for="diseaseId">Choroba</label>
+                <label for="diseaseId">Disease</label>
                 <select id="diseaseId" class="form-control">
                     <option th:each="d : ${diseases}"
-                            th:value="${d.id}"
+                            th:value="${d.id}"git commi
                             th:text="${d.name}">
                     </option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="nameId">Nazwa</label>
+                <label for="nameId">Name</label>
                 <input type="text" class="form-control" id="nameId"/>
             </div>
             <div class="form-group">
-                <label for="versionId">Wersja</label>
+                <label for="versionId">Version</label>
                 <input type="text" class="form-control" id="versionId"/>
             </div>
             <div class="form-group">
-                <label for="commentId">Komentarz</label>
+                <label for="commentId">Comment</label>
                 <textarea class="form-control" id="commentId"/>
             </div>
         </form>
         <ul class="cd-buttons">
-            <li id="saveAsNewId"><a href="#0">Zapisz jako nowa</a></li>
-            <li id="modifyId"><a href="#0">Modyfikuj</a></li>
+            <li id="saveAsNewId"><a href="#0">Save as new</a></li>
+            <li id="modifyId"><a href="#0">Modify</a></li>
         </ul>
         <a href="#0" class="cd-popup-close img-replace">Close</a>
     </div> <!-- cd-popup-container -->

@@ -83,7 +83,7 @@ function showContextMenuForPath(pos) {
     contextMode.active = true;
 }
 
-function disableContextMode() {
+var disableContextMode = function () {
     if (contextMode.active){
         contextMode.active = false;
         $('.context-menu').addClass('hide');

@@ -99,16 +99,4 @@ public class User {
         this.pathwaysSet = pathwaysSet;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", status='" + status + '\'' +
-                ", role=" + role +
-                '}';
-    }
 }

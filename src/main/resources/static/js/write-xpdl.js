@@ -1,16 +1,12 @@
 var saveXPDL = function () {
     var xpdLWrapper = prepareXPDL();
-    $.ajax({
-        url: 'xml',
+    return $.ajax({
+        url: 'xml/save',
         type: 'POST',
         data: JSON.stringify(xpdLWrapper),
         cache: false,
-        dataType: 'json',
         processData: false, // Don't process the files
         contentType: "application/json; charset=utf-8",
-        success: function (data) {
-            console.log(data);
-        }
     });
 };
 

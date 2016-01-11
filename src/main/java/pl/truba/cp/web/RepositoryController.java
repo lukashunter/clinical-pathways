@@ -6,6 +6,7 @@ import pl.truba.cp.domain.DicDisease;
 import pl.truba.cp.domain.Pathway;
 import pl.truba.cp.service.RepositoryService;
 import pl.truba.cp.type.wrapper.PathwayWrapper;
+import pl.truba.cp.type.wrapper.XpdlWrapper;
 
 import java.util.List;
 
@@ -30,5 +31,12 @@ public class RepositoryController {
     public @ResponseBody List<PathwayWrapper> getPathways(){
         List<PathwayWrapper> pathwayList = repositoryService.getPathWaysAll();
         return pathwayList;
+    }
+
+    @RequestMapping(value="/pathways/{id}", method = RequestMethod.POST)
+    public @ResponseBody
+    XpdlWrapper getXpdlById(@PathVariable Integer id) {
+        PathwayWrapper pathwayWrapper = repositoryService.getPathwayById(id);
+        return pathwayWrapper.getXpdlWrapper();
     }
 }

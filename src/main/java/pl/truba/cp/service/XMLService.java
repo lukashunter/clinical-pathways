@@ -5,10 +5,12 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.WebApplicationContext;
 import pl.truba.cp.bean.v21.*;
+import pl.truba.cp.config.AppProperties;
 import pl.truba.cp.type.wrapper.XpdlWrapper;
 
 import javax.xml.bind.*;
 import java.io.File;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +39,20 @@ public class XMLService {
         return packageType;
     }
 
+    public PackageType getPackageType(StringReader stringReader) {
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(PackageType.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+            JAXBElement<PackageType> jaxbElement = (JAXBElement<PackageType>) jaxbUnmarshaller.unmarshal(stringReader);
+            packageType = jaxbElement.getValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return packageType;
+    }
+
     public PackageType getPackageType(){
         return packageType;
     }
@@ -54,8 +70,15 @@ public class XMLService {
         return fileXML;
     }
 
+    public PackageType getXpdlWrapperFromString(String xpdl) {
+        StringReader reader = new StringReader(xpdl);
+        PackageType packageType = getPackageType(reader);
+
+        return packageType;
+    }
+
     private File saveXML(PackageType packageType) throws JAXBException {
-        File xmlFile = new File("download/"+getUUID().toString() +".xpdl");
+        File xmlFile = new File(AppProperties.PATH_XPDL +getUUID().toString() +".xpdl");
 
         JAXBContext jaxbContext = JAXBContext.newInstance(PackageType.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();

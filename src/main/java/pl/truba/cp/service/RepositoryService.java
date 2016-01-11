@@ -3,12 +3,14 @@ package pl.truba.cp.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.truba.cp.bean.v21.PackageType;
 import pl.truba.cp.domain.DicDisease;
 import pl.truba.cp.domain.Pathway;
 import pl.truba.cp.domain.User;
 import pl.truba.cp.repository.DicDiseaseRepository;
 import pl.truba.cp.repository.PathwayRepository;
 import pl.truba.cp.type.wrapper.PathwayWrapper;
+import pl.truba.cp.type.wrapper.XpdlWrapper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,18 +60,41 @@ public class RepositoryService {
 
         List<PathwayWrapper> pathwayWrapperList = new ArrayList<>();
         for (Pathway pathway : pathways) {
-            PathwayWrapper pathwayWrapper = new PathwayWrapper();
-            pathwayWrapper.setDiseaseId(pathway.getDicDisease().getId());
-            pathwayWrapper.setDiseaseName(pathway.getDicDisease().getName());
-            pathwayWrapper.setNamePathway(pathway.getName());
-            pathwayWrapper.setComment(pathway.getComment());
-            pathwayWrapper.setVersion(pathway.getComment());
-            pathwayWrapper.setXpdlWrapper(pathwayWrapper.getXpdlWrapper());
+            PathwayWrapper pathwayWrapper = getPathwayWrapper(pathway);
 
             pathwayWrapperList.add(pathwayWrapper);
         }
 
         return pathwayWrapperList;
+    }
+
+    public PathwayWrapper getPathwayById(Integer id) {
+        Pathway pathway = pathwayRepository.findOne(id);
+        PathwayWrapper pathwayWrapper = getPathwayWrapper(pathway);
+
+        PackageType packageType = xmlService.getXpdlWrapperFromString(pathwayWrapper.getXpdl());
+        XpdlWrapper xpdlWrapper = new XpdlWrapper();
+        xpdlWrapper.setPackageType(packageType);
+        pathwayWrapper.setXpdlWrapper(xpdlWrapper);
+
+        return pathwayWrapper;
+    }
+
+    private PathwayWrapper getPathwayWrapper(Pathway pathway) {
+        PathwayWrapper pathwayWrapper = new PathwayWrapper();
+        pathwayWrapper.setPathwayId(pathway.getId());
+        pathwayWrapper.setDiseaseId(pathway.getDicDisease().getId());
+        pathwayWrapper.setDiseaseName(pathway.getDicDisease().getName());
+        pathwayWrapper.setNamePathway(pathway.getName());
+        pathwayWrapper.setComment(pathway.getComment());
+        pathwayWrapper.setVersion(pathway.getVersion());
+        pathwayWrapper.setXpdl(pathway.getXpdl());
+
+        return pathwayWrapper;
+    }
+
+    public void test() {
+        pathwayRepository.findByName("ss");
     }
 
 }

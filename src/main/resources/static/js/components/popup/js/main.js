@@ -1,6 +1,7 @@
 jQuery(document).ready(function($){
 	//open popup
 	$('#btnCommitId').on('click', function(event){
+		disableContextMode();
 		event.preventDefault();
 		$('.cd-popup').addClass('is-visible');
 	});

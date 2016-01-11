@@ -6,4 +6,5 @@ import pl.truba.cp.domain.Pathway;
 
 @Repository
 public interface PathwayRepository extends CrudRepository<Pathway, Integer> {
+    Pathway findByName(String name);
 }

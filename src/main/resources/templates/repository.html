@@ -10,35 +10,52 @@
 
 <script>
     var app = angular.module('app', ['ui.grid']);
-    app.controller('RepoController', function ($scope, $http) {
+    app.controller('RepoController', function ($scope, $http, $window) {
         $scope.gridOptions = {
+            enableHorizontalScrollbar: false,
             columnDefs: [
-                {field: 'diseaseName', displayName: 'Nazwa choroby'},
-                {field: 'namePathway', displayName: 'Nazwa ścieżki klinicznej'},
-                {field: 'version', displayName: 'Wersja'},
-                {field: 'comment', displayName: 'Komentarz'},
+                {field: 'diseaseName', displayName: 'Name of diesease'},
+                {field: 'namePathway', displayName: 'Name of clinical pathway'},
+                {field: 'version', displayName: 'Version'},
+                {field: 'comment', displayName: 'Comment'},
                 {
                     name: 'edit',
-                    displayName: 'Edit',
-                    cellTemplate: '<button id="editBtn" type="button" class="btn-small" ng-click="edit(row.entity)" >Edit</button> '
+                    enableSorting: false,
+                    displayName: '',
+                    width: '50',
+                    cellTemplate: '<button id="editBtn" type="button" class="btn btn-small fa fa-pencil" ng-click="grid.appScope.edit(row.entity)" ></button> '
                 }
             ]
         };
 
-        $scope.init = function(){
-            $http.get("repository/pathways").then(function(response){
+        $scope.init = function () {
+            $http.get("repository/pathways").then(function (response) {
                 console.log(response);
                 $scope.gridOptions.data = response.data;
             });
+        };
+
+        $scope.edit = function (entity) {
+            console.log(entity);
+            $window.location.href = entity.pathwayId;
         }
+
+        $scope.$watch(function () {
+            return $window.innerWidth;
+        }, function () {
+            var newHeight = $window.innerHeight - 130;
+            angular.element(document.getElementsByClassName('gridStyle')[0]).css('height', newHeight + 'px');
+        });
+
+
     });
 </script>
 
 <body>
 <nav th:replace="fragments/navbar :: navbar"></nav>
 <div th:replace="fragments/commitPopup :: commit"></div>
-<div ng-controller="RepoController" data-ng-init="init()" style="height: 100%">
-    <div class="gridStyle" ui-grid="gridOptions" style="height: 100%"></div>
+<div ng-controller="RepoController" data-ng-init="init()" style="height: 100%; margin: 0 10px">
+    <div class="gridStyle" ui-grid="gridOptions" external-scopes="gridScope" style="height: 100%"></div>
 
 </div>
 </body>

@@ -1,4 +1,4 @@
-function readDiagram(data) {
+var readDiagram = function (data) {
     console.log(data);
     EDITOR.xpdl = data;
     if (EDITOR.xpdl.workflowProcesses != null) {
@@ -7,7 +7,7 @@ function readDiagram(data) {
     }
 }
 
-function readWorkflowProcesses(workflowProcessList) {
+var readWorkflowProcesses = function (workflowProcessList) {
     _.forEach(workflowProcessList, function (workflowProcess) {
         if (workflowProcess.activities != null) {
             const activityArray = workflowProcess.activities.activity;

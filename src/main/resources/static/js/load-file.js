@@ -21,7 +21,7 @@ var sendFileToServer = function (files) {
 }
 
 
-function sendFile(data) {
+var sendFile = function (data) {
     $.ajax({
         url: 'upload',
         type: 'POST',

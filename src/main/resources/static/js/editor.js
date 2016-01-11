@@ -46,7 +46,7 @@ var pathIdOnHover;
             disableContextMode();
         });
 
-        $('#btnDownloadId').on('click', saveXPDL);
+        $('#btnDownloadId').on('click', download);
         $('#btnRepoId').on('click', function(){
             window.location.href = 'pathways';
         });
@@ -65,43 +65,44 @@ var pathIdOnHover;
             EDITOR.draw = SVG('drawing').size(window.innerWidth - 55, window.innerHeight - 80);
             EDITOR.elementsMap = {};
             EDITOR.pathsMap = {};
+            loadPathway();
         } else {
             alert('SVG not supported')
         }
     }
 }));
 
-function handlerEditorClick() {
+var handlerEditorClick = function () {
     if (editMode.active) handleDisableEditMode();
 
     if (pathIdOnHover) {
         enableContextMenuForPath();
     }
-}
+};
 
-function getEditorCursorPosition() {
+var getEditorCursorPosition = function () {
     return {x: cursor.x - 55, y: cursor.y - 70};
-}
+};
 
-function getTypeByActivityId(activityId) {
+var getTypeByActivityId = function (activityId) {
     return EDITOR.elementsMap[activityId].type;
-}
+};
 
-function getSvgTextByActivityId(activityId) {
+var getSvgTextByActivityId = function (activityId) {
     return EDITOR.elementsMap[activityId].svgText;
-}
+};
 
-function getSvgId(el) {
+var getSvgId = function (el) {
     return el.attr('id');
-}
+};
 
-function getSvgTextByPath(path) {
+var getSvgTextByPath = function (path) {
     var svgId = getSvgId(path);
     var svgText = EDITOR.pathsMap[svgId].svgText;
     return svgText;
-}
+};
 
-function getCenterPath(pathId) {
+var getCenterPath = function (pathId) {
     var path = EDITOR.pathsMap[pathId].svgPath;
 
     var pathArray = path.array();
@@ -112,9 +113,9 @@ function getCenterPath(pathId) {
 
     var pos = {x: (sx + ex) / 2, y: (sy + ey) / 2};
     return pos;
-}
+};
 
-function generateUUID() {
+var generateUUID = function () {
     var d = new Date().getTime();
     var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = (d + Math.random() * 16) % 16 | 0;
@@ -122,4 +123,35 @@ function generateUUID() {
         return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
     });
     return uuid;
-}
+};
+
+var loadPathway = function(){
+    var idFromUrl = getIdFromUrl();
+    if(idFromUrl){
+        loadXpdlById(idFromUrl);
+    }
+};
+
+var loadXpdlById = function(id){
+    $.ajax({
+        url: 'repository/pathways/'+id,
+        type: 'POST',
+        cache: false,
+        dataType: 'json',
+        processData: false, // Don't process the files
+        contentType: false, // Set content type to false as jQuery will tell the server its a query string request
+        success: function (data, textStatus, jqXHR) {
+            readDiagram(data.packageType)
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log('ERRORS: ' + jqXHR);
+            console.log('ERRORS: ' + textStatus);
+            console.log('ERRORS: ' + errorThrown);
+        }
+    });
+};
+
+var getIdFromUrl = function(){
+    var path = location.pathname.replace('/cp/', '');
+    return path;
+};
