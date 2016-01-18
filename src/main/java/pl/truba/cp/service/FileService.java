@@ -1,6 +1,5 @@
 package pl.truba.cp.service;
 
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.truba.cp.config.AppProperties;

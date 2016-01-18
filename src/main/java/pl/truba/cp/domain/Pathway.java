@@ -18,6 +18,11 @@ public class Pathway {
     private String version;
     private String xpdl;
 
+    public Pathway(){    }
+    public Pathway(Integer id){
+        this.id = id;
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_dic_disease", nullable = false)
     private DicDisease dicDisease;

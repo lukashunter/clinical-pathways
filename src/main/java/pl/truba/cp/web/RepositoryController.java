@@ -22,6 +22,11 @@ public class RepositoryController {
         repositoryService.savePathway(pathwayWrapper);
     }
 
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    public void updatePathway(@RequestBody PathwayWrapper pathwayWrapper) {
+        repositoryService.updatePathway(pathwayWrapper);
+    }
+
     @RequestMapping(value="/diseases")
     public @ResponseBody List<DicDisease> getDicDiseases() {
         return repositoryService.getDiseasesAll();
@@ -35,8 +40,8 @@ public class RepositoryController {
 
     @RequestMapping(value="/pathways/{id}", method = RequestMethod.POST)
     public @ResponseBody
-    XpdlWrapper getXpdlById(@PathVariable Integer id) {
+    PathwayWrapper getXpdlById(@PathVariable Integer id) {
         PathwayWrapper pathwayWrapper = repositoryService.getPathwayById(id);
-        return pathwayWrapper.getXpdlWrapper();
+        return pathwayWrapper;
     }
 }

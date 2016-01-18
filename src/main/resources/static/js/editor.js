@@ -20,6 +20,8 @@ var contextMode = {active: false};
 
 var pathIdOnHover;
 
+var editorDimension = {width: window.innerWidth - 55, height:window.innerHeight - 80};
+
 (function (ClinicalPathways) {
     ClinicalPathways(window.jQuery, window, document);
 }(function ($, window, document) {
@@ -127,9 +129,8 @@ var generateUUID = function () {
 
 var loadPathway = function(){
     var idFromUrl = getIdFromUrl();
-    if(idFromUrl){
-        loadXpdlById(idFromUrl);
-    }
+    if(idFromUrl) loadXpdlById(idFromUrl);
+    else disableModify();
 };
 
 var loadXpdlById = function(id){
@@ -141,7 +142,9 @@ var loadXpdlById = function(id){
         processData: false, // Don't process the files
         contentType: false, // Set content type to false as jQuery will tell the server its a query string request
         success: function (data, textStatus, jqXHR) {
-            readDiagram(data.packageType)
+            console.log(data);
+            readDiagram(data.xpdlWrapper.packageType);
+            fillPathwayForm(data);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log('ERRORS: ' + jqXHR);
@@ -152,6 +155,18 @@ var loadXpdlById = function(id){
 };
 
 var getIdFromUrl = function(){
-    var path = location.pathname.replace('/cp/', '');
-    return path;
+    var pathId = location.pathname.replace('/cp/', '');
+    return pathId;
+};
+
+var fillPathwayForm = function(pathwayWrapper){
+    $('#nameId').val(pathwayWrapper.namePathway);
+    $('#diseaseId').val(pathwayWrapper.diseaseId);
+    $('#versionId').val(pathwayWrapper.version);
+    $('#commentId').val(pathwayWrapper.comment);
+};
+
+var disableModify = function(){
+    $('#modifyId').css('display', 'none');
+    $('#saveAsNewId').css('width','100%')
 };

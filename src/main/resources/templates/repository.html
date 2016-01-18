@@ -40,9 +40,7 @@
             $window.location.href = entity.pathwayId;
         }
 
-        $scope.$watch(function () {
-            return $window.innerWidth;
-        }, function () {
+        $scope.$watch($window.innerWidth, function () {
             var newHeight = $window.innerHeight - 130;
             angular.element(document.getElementsByClassName('gridStyle')[0]).css('height', newHeight + 'px');
         });

@@ -4,6 +4,11 @@ var readDiagram = function (data) {
     if (EDITOR.xpdl.workflowProcesses != null) {
         const workflowProcessArray = EDITOR.xpdl.workflowProcesses.workflowProcess;
         readWorkflowProcesses(workflowProcessArray);
+
+        var width = editorDimension.width > window.innerWidth ? editorDimension.width : window.innerWidth - 55;
+        var height = editorDimension.height > window.innerHeight ? editorDimension.height : window.innerHeight - 80;
+
+        EDITOR.draw.size(width, height);
     }
 }
 
@@ -21,11 +26,17 @@ var readWorkflowProcesses = function (workflowProcessList) {
     })
 }
 
-function readActivities(activitiesList) {
+var readActivities = function (activitiesList) {
     _.forEach(activitiesList, function (activity) {
         var elementType = findElement(activity);
         svgElementFactory(elementType, activity);
     })
+
+    _.forOwn(EDITOR.elementsMap, function (value, key) {
+        var group = value.group;
+        group.draggable(false)
+        setupDragConstraint(group);
+    });
 }
 
 function findElement(activity) {

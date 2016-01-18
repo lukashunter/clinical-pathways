@@ -46,11 +46,20 @@ var prepareElement = function(elementType, activity) {
     return wrapper;
 }
 
-function getDimension(activity) {
+var setEditorDimension = function (nodeGraphicsInfo) {
+    if (editorDimension.width <  nodeGraphicsInfo.coordinates.xcoordinate + 100)
+        editorDimension.width = nodeGraphicsInfo.coordinates.xcoordinate + 180;
+    if (editorDimension.height < nodeGraphicsInfo.coordinates.ycoordinate + 20)
+        editorDimension.height = nodeGraphicsInfo.coordinates.ycoordinate + 200;
+};
+
+var getDimension = function (activity) {
     var nodeGraphicsInfos = activity.nodeGraphicsInfos;
 
     if (nodeGraphicsInfos && nodeGraphicsInfos.nodeGraphicsInfo.length > 0) {
         var nodeGraphicsInfo = nodeGraphicsInfos.nodeGraphicsInfo[0];
+
+        setEditorDimension(nodeGraphicsInfo);
 
         return {
             coordinates: nodeGraphicsInfo.coordinates,
@@ -60,7 +69,7 @@ function getDimension(activity) {
     }
 }
 
-function drawEvent(dimension) {
+var drawEvent = function(dimension) {
      var group = EDITOR.draw.group();
     var circle = group.circle(50);
     group.cx(dimension.coordinates.xcoordinate).cy(dimension.coordinates.ycoordinate);
@@ -137,11 +146,15 @@ function drawGateway(dimension) {
     return {group: group, svgElement: rect};
 }
 
-function setupDragConstraint(group) {
+var setupDragConstraint = function (group) {
+
+    var width = editorDimension.width > window.innerWidth ? editorDimension.width : window.innerWidth;
+    var height = editorDimension.height > window.innerHeight ? editorDimension.height : window.innerHeight;
+
     group.draggable({
         minX: 2
         , minY: 2
-        , maxX: window.innerWidth - 57
-        , maxY: window.innerHeight - 82
+        , maxX: width - 57
+        , maxY: height - 82
     });
 }

@@ -2,12 +2,13 @@ var download = function () {
     saveXPDL().done(function (fileName) {
         $.fileDownload('download/'+encodeURI(fileName))
             .done(function () {
-                alert('File download a success!');
+                alertify.success('File download successfully!');
             })
             .fail(function () {
-                alert('File download failed!');
+                alertify.error("File download failed!");
             });
+        alertify.success('File download successfully!');
     }).fail(function(jqXHR, textStatus){
-        alert( "Request failed: " + textStatus );
+        alertify.error("File download failed!");
     });
 };

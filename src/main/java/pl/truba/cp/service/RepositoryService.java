@@ -49,6 +49,22 @@ public class RepositoryService {
         pathwayRepository.save(pathway);
     }
 
+    public void updatePathway(PathwayWrapper pathwayWrapper) {
+        Pathway pathway = pathwayRepository.findOne(pathwayWrapper.getPathwayId());
+        pathway.setName(pathwayWrapper.getNamePathway());
+        pathway.setComment(pathwayWrapper.getComment());
+        pathway.setVersion(pathwayWrapper.getVersion());
+
+        pathway.setModificationDate(new Date());
+        pathway.setModifyByUser(new User(1));
+
+        DicDisease disease = diseaseRepository.findOne(pathwayWrapper.getDiseaseId());
+        pathway.setDicDisease(disease);
+
+        String xmlAsString = xmlService.getXmlAsString(pathwayWrapper.getXpdlWrapper());
+        pathway.setXpdl(xmlAsString);
+    }
+
     public List<DicDisease> getDiseasesAll() {
         List<DicDisease> dicDiseases = (List<DicDisease>) diseaseRepository.findAll();
 

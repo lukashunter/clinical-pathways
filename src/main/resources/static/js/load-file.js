@@ -11,14 +11,14 @@ $(document).on('change', '.btn-file :file', function () {
 var sendFileToServer = function (files) {
     var formData = new FormData();
 
-    for (var i = 0; i < 1; i++) {
-        var file = files[i];
+    var file = files[0];
+    formData.append('file', file, file.name);
 
-        formData.append('file', file, file.name);
-    }
+    var fileExtension = file.name.split("\.")[1];
 
-    sendFile(formData);
-}
+    if(fileExtension && fileExtension.toUpperCase() == 'XPDL') sendFile(formData);
+    else alertify.alert("File is incorrect!");
+};
 
 
 var sendFile = function (data) {

@@ -1,25 +1,25 @@
 
-function createStart(event){
+var createStart = function (event){
     var activity = createActivity(event);
     svgElementFactory(ElementTypeEnum.EVENT, activity);
-}
+};
 
-function createGate(event){
+var createGate = function (event){
     var activity = createActivity(event);
     svgElementFactory(ElementTypeEnum.GATE, activity);
-}
+};
 
-function createLab(event){
+var createLab = function (event){
     var activity = createActivity(event);
     svgElementFactory(ElementTypeEnum.TASK_LAB, activity);
-}
+};
 
-function createResearch(event){
+var createResearch = function (event){
     var activity = createActivity(event);
     svgElementFactory(ElementTypeEnum.TASK_RESEARCH, activity);
-}
+};
 
-function createActivity(event){
+var createActivity = function (){
     var coordinates = {xcoordinate: 150, ycoordinate: 70};
 
     var nodeGraphicsInfos = {nodeGraphicsInfo: []};
@@ -34,4 +34,4 @@ function createActivity(event){
     var activity = {id: generateUUID(), nodeGraphicsInfos: nodeGraphicsInfos};
 
     return activity;
-}
+};
